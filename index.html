@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMS Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" xintegrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f9;
+        }
+        .message-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .message-box {
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 1;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .btn-primary { background-color: #10B981; }
+        .btn-primary:hover { background-color: #059669; } 
+        .btn-danger { background-color: #EF4444; } 
+        .btn-danger:hover { background-color: #DC2626; } 
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #fff;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+    <!-- Message Container for notifications -->
+    <div id="message-container" class="message-container"></div>
+
+    <div class="max-w-7xl mx-auto">
+        <header class="mb-8">
+            <h1 class="text-3xl font-extrabold text-gray-900 mb-2">Student Information Management System (SIMS)</h1>
+        </header>
+
+        <!-- Main Dashboard Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Left Column: Add Student Form -->
+            <div class="lg:col-span-1">
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-user-plus mr-2 text-green-500"></i> Add New Student
+                    </h2>
+                    
+                    <form id="studentForm" class="space-y-4">
+                        <!-- Student ID -->
+                        <div>
+                            <label for="id" class="block text-sm font-medium text-gray-700">Student ID</label>
+                            <input type="text" id="id" name="id" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2 border" placeholder="e.g., IT-101-00026" required>
+                            <p id="id-error" class="text-xs text-red-500 mt-1 hidden">Student ID must be unique.</p>
+                        </div>
+
+                        <!-- Full Name -->
+                        <div>
+                            <label for="fullName" class="block text-sm font-medium text-gray-700">Full Name</label>
+                            <input type="text" id="fullName" name="fullName" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2 border" placeholder="First Name Last Name" required>
+                            <p id="fullName-error" class="text-xs text-red-500 mt-1 hidden">Full Name is required.</p>
+                        </div>
+                        
+                        <!-- Email -->
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                            <input type="email" id="email" name="email" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2 border" placeholder="student@gmail.com" required>
+                            <p id="email-error" class="text-xs text-red-500 mt-1 hidden">Email is required.</p>
+                        </div>
+
+                        <!-- Gender (Radio Buttons) -->
+                        <div class="pt-1">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+                            <div class="flex space-x-4">
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="gender" value="Male" class="form-radio text-green-600">
+                                    <span class="ml-2 text-gray-700">Male</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="gender" value="Female" class="form-radio text-green-600">
+                                    <span class="ml-2 text-gray-700">Female</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input type="radio" name="gender" value="Other" class="form-radio text-green-600">
+                                    <span class="ml-2 text-gray-700">Other</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Program -->
+                        <div>
+                            <label for="program" class="block text-sm font-medium text-gray-700">Program / Major</label>
+                            <input type="text" id="program" name="program" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2 border" placeholder="e.g., BS Computer Science" required>
+                            <p id="program-error" class="text-xs text-red-500 mt-1 hidden">Program is required.</p>
+                        </div>
+
+                        <!-- Year Level -->
+                        <div>
+                            <label for="yearLevel" class="block text-sm font-medium text-gray-700">Year Level</label>
+                            <select id="yearLevel" name="yearLevel" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2 border bg-white" required>
+                                <option value="">Select Year</option>
+                                <option value="1st Year">1st Year</option>
+                                <option value="2nd Year">2nd Year</option>
+                                <option value="3rd Year">3rd Year</option>
+                                <option value="4th Year">4th Year</option>
+                                <option value="5th Year">5th Year</option>
+                            </select>
+                            <p id="yearLevel-error" class="text-xs text-red-500 mt-1 hidden">Year Level is required.</p>
+                        </div>
+
+                        <!-- University -->
+                        <div>
+                            <label for="university" class="block text-sm font-medium text-gray-700">University / College</label>
+                            <input type="text" id="university" name="university" class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2 border" placeholder="e.g., Caraga State University" required>
+                            <p id="university-error" class="text-xs text-red-500 mt-1 hidden">University is required.</p>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white btn-primary transition duration-150">
+                            <span id="loading-spinner" class="spinner mr-2 hidden"></span>
+                            <span id="submit-text">Add Student</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Right Column: Statistics & Table -->
+            <div class="lg:col-span-2 space-y-8">
+                
+                <!-- Statistics Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                    
+                    <!-- Total Students -->
+                    <div class="bg-white p-5 rounded-xl shadow-md flex items-center justify-between border-l-4 border-green-500">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">Total Students</p>
+                            <p id="statTotalStudents" class="text-3xl font-bold text-gray-900 mt-1">0</p>
+                        </div>
+                        <i class="fas fa-users text-3xl text-green-300"></i>
+                    </div>
+
+                    <!-- Male Students -->
+                    <div class="bg-white p-5 rounded-xl shadow-md flex items-center justify-between border-l-4 border-blue-500">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">Male Students</p>
+                            <p id="statMaleStudents" class="text-3xl font-bold text-gray-900 mt-1">0</p>
+                        </div>
+                        <i class="fas fa-mars text-3xl text-blue-300"></i>
+                    </div>
+
+                    <!-- Female Students -->
+                    <div class="bg-white p-5 rounded-xl shadow-md flex items-center justify-between border-l-4 border-pink-500">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">Female Students</p>
+                            <p id="statFemaleStudents" class="text-3xl font-bold text-gray-900 mt-1">0</p>
+                        </div>
+                        <i class="fas fa-venus text-3xl text-pink-300"></i>
+                    </div>
+                    
+                    <!-- Programs Offered -->
+                    <div class="bg-white p-5 rounded-xl shadow-md flex items-center justify-between border-l-4 border-yellow-500">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">Programs Offered</p>
+                            <p id="statPrograms" class="text-3xl font-bold text-gray-900 mt-1">0</p>
+                        </div>
+                        <i class="fas fa-book-open text-3xl text-yellow-300"></i>
+                    </div>
+                </div>
+
+                <!-- Filters and Search Bar -->
+                <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-filter mr-2 text-gray-500"></i> Student Registry
+                    </h2>
+                    
+                    <!-- Search Input -->
+                    <div class="mb-4">
+                        <label for="searchQuery" class="sr-only">Search Students</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-gray-400"></i>
+                            </div>
+                            <input type="text" id="searchQuery" placeholder="Search by name, ID, program, or university..." class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 pl-10 p-2 border">
+                        </div>
+                    </div>
+
+                    <!-- Filter Dropdowns -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                        <select id="genderFilter" class="rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2 border bg-white text-sm">
+                            <option value="">All Genders</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        
+                        <select id="programFilter" class="rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2 border bg-white text-sm">
+                            <option value="">All Programs</option>
+                            <!-- Options populated by JS -->
+                        </select>
+                        
+                        <select id="yearLevelFilter" class="rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2 border bg-white text-sm">
+                            <option value="">All Year Levels</option>
+                            <!-- Options populated by JS -->
+                        </select>
+                        
+                        <select id="universityFilter" class="rounded-lg border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 p-2 border bg-white text-sm">
+                            <option value="">All Universities</option>
+                            <!-- Options populated by JS -->
+                        </select>
+                    </div>
+
+                    <!-- Control Buttons -->
+                    <div class="flex space-x-3">
+                        <button id="resetFilterBtn" class="flex-1 py-2 px-4 rounded-lg text-sm font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition duration-150">
+                            Clear Filters
+                        </button>
+                        <button id="refreshBtn" class="flex-1 py-2 px-4 rounded-lg text-sm font-medium bg-indigo-500 text-white hover:bg-indigo-600 transition duration-150">
+                            <i class="fas fa-sync-alt mr-1"></i> Refresh Data
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Student Table -->
+                <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-x-auto">
+                    <div class="p-4 flex justify-between items-center bg-gray-50 border-b">
+                        <p class="text-sm font-semibold text-gray-700">Displaying <span id="studentCountDisplay" class="font-bold text-green-700">0 of 0 students</span></p>
+                    </div>
+
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gender</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Program</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Year</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">University</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentTableBody" class="bg-white divide-y divide-gray-200">
+                        </tbody>
+                    </table>
+                    
+                    <!-- No Results Message -->
+                    <div id="noResults" class="hidden text-center p-10 text-gray-500">
+                        <i class="fas fa-exclamation-triangle text-3xl mb-3 text-yellow-500"></i>
+                        <p class="font-semibold">No Students Found</p>
+                        <p class="text-sm">Try clearing your filters or adjusting your search query.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
