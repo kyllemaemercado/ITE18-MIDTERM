@@ -1,5 +1,6 @@
 const express = require('express');
-const cors = require('./middleware/cors'); 
+const cors = require('cors');
+const customCors = require('./middleware/cors');
 const studentRoutes = require('./routes/students');
 const path = require('path');
 const fs = require('fs');
@@ -7,8 +8,10 @@ const fs = require('fs');
 const app = express();
 const PORT = 3000;
 
-app.use(express.json()); 
-app.use(cors);
+app.use(express.json());
+// Use the npm cors package with default settings and also apply the custom middleware
+app.use(cors());
+app.use(customCors);
 
 // --- Initialize Data File (if it doesn't exist) ---
 const dataFilePath = path.join(__dirname, 'data', 'students.json');
