@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:3000/api/students';
+const API_BASE_URL = 'https://student-information-management-system-q0q2.onrender.com/api/students';
 
 // --- Global Data and UI elements ---
 let studentsData = []; 
