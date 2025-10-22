@@ -151,5 +151,14 @@
         "program": "BS INFORMATION SYSTEM",
         "yearLevel": "1st Year",
         "university": "Caraga State University - Main"
+    },
+    {
+        "id": "CE-221-09900",
+        "fullName": "JONATHAN REZENDEZ",
+        "email": "jonathan@gmail.com",
+        "gender": "Male",
+        "program": "BS CIVIL ENGINEERING",
+        "yearLevel": "1st Year",
+        "university": "CARAGA STATE UNIVERSITY - MAIN"
     }
 ]

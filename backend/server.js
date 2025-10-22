@@ -36,7 +36,7 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(publicPath, 'index.html'));
 });
 
-app.listen(PORT, () => {
+app.listen(PORT,"0.0.0.0", () => {
     console.log(`Server listening on port ${PORT}`);
     console.log(`Access the backend at http://localhost:${PORT}`);
 });
