@@ -142,5 +142,14 @@
         "program": "BS Civil Engineering",
         "yearLevel": "1st Year",
         "university": "Caraga State University - Cabadbaran Campus"
+    },
+    {
+        "id": "IS-221-01234",
+        "fullName": "Akieherro Mercado",
+        "email": "akieherro@gmail.com",
+        "gender": "Female",
+        "program": "BS INFORMATION SYSTEM",
+        "yearLevel": "1st Year",
+        "university": "Caraga State University - Main"
     }
 ]

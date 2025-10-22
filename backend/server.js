@@ -13,6 +13,10 @@ app.use(express.json());
 app.use(cors());
 app.use(customCors);
 
+// Serve frontend static files (project root) so index.html and script.js are available
+const publicPath = path.join(__dirname, '..');
+app.use(express.static(publicPath));
+
 // --- Initialize Data File (if it doesn't exist) ---
 const dataFilePath = path.join(__dirname, 'data', 'students.json');
 if (!fs.existsSync(dataFilePath)) {
@@ -27,8 +31,9 @@ if (!fs.existsSync(dataFilePath)) {
 app.use('/api/students', studentRoutes);
 
 // Simple root route for testing
+// Serve the frontend index.html at root so the app can be opened via http://localhost:3000/
 app.get('/', (req, res) => {
-    res.send('Student Management Backend is running!');
+    res.sendFile(path.join(publicPath, 'index.html'));
 });
 
 app.listen(PORT, () => {
